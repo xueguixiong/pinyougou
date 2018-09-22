@@ -26,6 +26,7 @@ public class BrandController {
      */
     @GetMapping("/brand/findAll")
     public List<Brand> findAll(){
+        System.out.println("11111");
         return brandService.findAll();
     }
 }
