@@ -12,7 +12,7 @@
   <artifactId>pinyougou-manager-web</artifactId>
   <packaging>war</packaging>
 
-  <properties>
+    <properties>
     <!-- 覆盖父工程中的port属性 -->
     <port>9101</port>
   </properties>
