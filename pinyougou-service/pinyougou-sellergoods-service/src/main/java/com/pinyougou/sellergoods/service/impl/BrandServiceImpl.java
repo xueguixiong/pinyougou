@@ -16,6 +16,7 @@ import tk.mybatis.mapper.entity.Example;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Service(interfaceName = "com.pinyougou.service.BrandService")
 @Transactional
@@ -87,6 +88,15 @@ public class BrandServiceImpl implements BrandService{
                 }
             });
             return new PageResult(pageInfo.getTotal(),pageInfo.getList());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Map<String, Object>> findAllByIdAndName() {
+        try {
+            return brandMapper.findAllByIdAndName();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

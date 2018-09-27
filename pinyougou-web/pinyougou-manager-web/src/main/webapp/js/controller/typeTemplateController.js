@@ -38,8 +38,14 @@ app.controller('typeTemplateController', function($scope, $controller, baseServi
 
     /** 显示修改 */
     $scope.show = function(entity){
-       /** 把json对象转化成一个新的json对象 */
-       $scope.entity = JSON.parse(JSON.stringify(entity));
+        /** 把json对象转化成一个新的json对象 */
+        $scope.entity = JSON.parse(JSON.stringify(entity));
+        /*把品牌转换为Json对象*/
+        $scope.entity.brandIds = JSON.parse($scope.entity.brandIds);
+        /*把规格转换为Json对象*/
+        $scope.entity.specIds = JSON.parse($scope.entity.specIds);
+        /*把扩展属性转换为Json对象*/
+        $scope.entity.customAttributeItems = JSON.parse($scope.entity.customAttributeItems);
     };
 
     /** 批量删除 */
@@ -59,4 +65,46 @@ app.controller('typeTemplateController', function($scope, $controller, baseServi
         }
     };
 
+    /*查询品牌*/
+    $scope.findBrandList=function () {
+        //发送异步请求
+        baseService.sendGet("/brand/findBrandList").then(function (response){
+            //获取响应数据
+            $scope.brandList = {data : response.data};
+        });
+    };
+
+    /*查询规格*/
+    $scope.findSpecList=function () {
+        //发送异步请求
+        baseService.sendGet("/specification/findSpecList").then(function (response){
+            //获取响应数据
+            $scope.specList = {data : response.data};
+        });
+    };
+    
+    //新增一行
+    $scope.addTableRow = function () {
+        $scope.entity.customAttributeItems.push({});
+    };
+    //删除一行
+    $scope.deleteTableRow = function (idx) {
+        $scope.entity.customAttributeItems.splice(idx,1);
+    };
+
+    $scope.jsonArr2Str = function (jsonStrArr,key) {
+        //把jsonStrArr字符串转换为对象
+        var jsonArr = JSON.parse(jsonStrArr);
+
+        //定义数组(文本里面有多个元素,定义数组接受)
+        var resArr = [];
+        //对对象进行迭代
+        for (var i = 0; i < jsonArr.length; i++) {
+            //取数组中的一个元素
+            var json = jsonArr[i];
+            //获取text
+            resArr.push(json[key]);
+        }
+        return resArr.join(",");
+    }
 });

@@ -4,18 +4,37 @@ app.controller('itemCatController', function($scope, $controller, baseService){
     /** 指定继承baseController */
     $controller('baseController',{$scope:$scope});
 
-    /** 查询条件对象 */
-    $scope.searchEntity = {};
-    /** 分页查询(查询条件) */
-    $scope.search = function(page, rows){
-        baseService.findByPage("/itemCat/findByPage", page,
-			rows, $scope.searchEntity)
-            .then(function(response){
-                /** 获取分页查询结果 */
-                $scope.dataList = response.data.rows;
-                /** 更新分页总记录数 */
-                $scope.paginationConf.totalItems = response.data.total;
-            });
+    /* 根据父级Id查询商品分类*/
+    $scope.findItemCatByParentId = function (parentId) {
+        baseService.sendGet("/itemCat/findItemCatByParentId","parentId=" + parentId).then(function (response) {
+            //获取响应数据 [{},{}]
+            $scope.dataList = response.data;
+        })
+    };
+
+    //定义变量
+    $scope.grade = 0;
+
+    //查询下级
+    $scope.selectList = function (entity,grade) {
+
+        $scope.grade = grade;
+        if (grade == 0){
+            $scope.itemCat_1 = null;
+            $scope.itemCat_2 = null;
+        }
+
+        if(grade == 1){
+            //用户选择的对象
+            $scope.itemCat_1 = entity; //一级分类
+        }
+        if(grade == 2){
+            //用户选择的对象
+            $scope.itemCat_2 = entity; //二级分类
+        }
+
+        $scope.findItemCatByParentId(entity.id);
+
     };
 
     /** 添加或修改 */

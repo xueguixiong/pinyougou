@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 @Service(interfaceName = "com.pinyougou.service.SpecificationService")
 @Transactional
@@ -74,6 +75,15 @@ public class SpecificationOptionServiceImpl implements SpecificationService{
                 }
             });
             return new PageResult(pageInfo.getTotal(),pageInfo.getList());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Map<String, Object>> findAllByIdAndName() {
+        try {
+            return specificationMapper.findAllByIdAndName();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

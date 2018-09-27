@@ -31,4 +31,6 @@ public interface ItemCatService {
 	/** 多条件分页查询 */
 	List<ItemCat> findByPage(ItemCat itemCat, int page, int rows);
 
+	/*根据父级Id查找商品*/
+    List<ItemCat> findItemCatByParentId(Long parentId);
 }
