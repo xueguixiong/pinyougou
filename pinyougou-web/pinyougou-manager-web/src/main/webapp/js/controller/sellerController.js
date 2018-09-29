@@ -58,4 +58,16 @@ app.controller('sellerController', function($scope, $controller, baseService){
             alert("请选择要删除的记录！");
         }
     };
+
+    /** 修改商家状态 */
+    $scope.updateStatus = function (sellerId,status) {
+        baseService.sendGet("/seller/updateStatus?sellerId="+sellerId+"&status="+status).then(function (response){
+            if (response.data){
+                /*重新加载数据*/
+                $scope.reload();
+            }else {
+                alert("操作失误!");
+            }
+        });
+    }
 });
