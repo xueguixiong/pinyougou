@@ -25,6 +25,19 @@ public class SpecificationOption implements Serializable{
     /** 规格id */
 	@Column(name="spec_id")
     private Long specId;
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Long getSpecId() {
+        return specId;
+    }
+
+    public void setSpecId(Long specId) {
+        this.specId = specId;
+    }
+
     /** 排序 */
 	@Column(name="orders")
     private Integer orders;
@@ -42,12 +55,7 @@ public class SpecificationOption implements Serializable{
     public void setOptionName(String optionName) {
         this.optionName = optionName == null ? null : optionName.trim();
     }
-    public Long getSpecId() {
-        return specId;
-    }
-    public void setSpecId(Long specId) {
-        this.specId = specId;
-    }
+
     public Integer getOrders() {
         return orders;
     }

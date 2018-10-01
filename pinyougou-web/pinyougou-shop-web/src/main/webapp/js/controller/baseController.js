@@ -58,4 +58,22 @@ app.controller("baseController", function($scope){
         // 返回数组中的元素用逗号分隔的字符串
         return resArr.join(",");
     };
+
+    /** 从json数组中根据key查询指定的json对象 */
+    $scope.searchJsonByKey = function (jsonArr,key,value) {
+        //迭代数组
+        for (var i = 0; i < jsonArr.length; i++) {
+            //取数组数据
+            /*
+            {"attributeValue":["移动4G","联通4G","电信4G"],
+                "attributeName":"网络"}
+             */
+            var json = jsonArr[i];
+            //json.attributeName == specName
+            if (json[key] == value){
+                return json;
+            }
+        }
+        return null;
+    }
 });

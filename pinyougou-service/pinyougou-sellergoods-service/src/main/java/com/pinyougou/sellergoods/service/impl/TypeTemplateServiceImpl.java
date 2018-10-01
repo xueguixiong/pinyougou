@@ -1,11 +1,14 @@
 package com.pinyougou.sellergoods.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.pinyougou.common.pojo.PageResult;
+import com.pinyougou.mapper.SpecificationOptionMapper;
 import com.pinyougou.mapper.TypeTemplateMapper;
+import com.pinyougou.pojo.SpecificationOption;
 import com.pinyougou.pojo.TypeTemplate;
 import com.pinyougou.service.TypeTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import tk.mybatis.mapper.entity.Example;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Service(interfaceName = "com.pinyougou.service.TypeTemplateService")
 @Transactional
@@ -24,6 +28,9 @@ public class TypeTemplateServiceImpl implements TypeTemplateService{
     /** 注入数据访问接口代理对象 */
     @Autowired
     private TypeTemplateMapper typeTemplateMapper;
+    @Autowired
+    private SpecificationOptionMapper specificationOptionMapper;
+
 
     @Override
     public void save(TypeTemplate typeTemplate) {
@@ -100,6 +107,37 @@ public class TypeTemplateServiceImpl implements TypeTemplateService{
                 }
             });
             return new PageResult(pageInfo.getTotal(),pageInfo.getList());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Map> findSpecByTemplateId(Long id) {
+        /*
+        * 目的：返回这样的数据格式(通过参数id进行查找)
+        * [{"id":33,"text":"网络"}，"options":[{},{}]]
+        * */
+        try {
+            //根据id查询类型模板对象
+            TypeTemplate typeTemplate = findOne(id);
+            //spec_ids : [{"id":33,"text":"网络"},{"id":33,"text":"网络"}]
+            //需要把spec_ids字符串转化为List<Map>
+            List<Map> specList = JSON.parseArray(typeTemplate.getSpecIds(),Map.class);
+            //循环迭代
+            for (Map map : specList) {
+                //map：{"id":33,"text":"网络"}
+                //获取id
+                Integer specId = (Integer) map.get("id");
+                //根据规格的id查询规格选项
+                SpecificationOption so = new SpecificationOption();
+                so.setSpecId(specId.longValue()); // spec_id = ?
+                //条件查询
+                List<SpecificationOption> options = specificationOptionMapper.select(so);
+                //添加options的key
+                map.put("options",options);
+            }
+            return specList;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
