@@ -48,4 +48,18 @@ public class GoodsController {
         }
         return goodsService.findByPage(goods,page,rows);
     }
+
+    /** 商家商品上下架(修改可销售状态) */
+    @GetMapping("/updateMarketable")
+    public boolean updateMarketable(Long[] ids,String status){
+
+        try {
+            goodsService.updateMarketable(ids,status);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }

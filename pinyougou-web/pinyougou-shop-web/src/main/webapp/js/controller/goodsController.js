@@ -248,4 +248,22 @@ app.controller('goodsController', function($scope, $controller, baseService){
     //定义状态码查询数组
     $scope.status = ['未审核','已审核','审核未通过','关闭']
 
+    $scope.updateMarketable = function (status) {
+        if ($scope.ids.length > 0){
+            baseService.sendGet("/goods/updateMarketable","ids=" + $scope.ids + "&status=" + status)
+                .then(function (response){
+                    if (response.data){
+                        alert("操作成功！！");
+                        /** 重新加载数据 */
+                        $scope.reload();
+                        /** 清空ids数组 */
+                        $scope.ids = [];
+                    }else {
+                        alert("操作失败！！")
+                    }
+                });
+        }else {
+            alert("请选择要操作的商品！");
+        }
+    }
 });

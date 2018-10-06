@@ -130,7 +130,12 @@ public class GoodsServiceImpl implements GoodsService{
 
     @Override
     public void deleteAll(Serializable[] ids) {
-
+        try {
+            /** 修改删除状态 */
+            goodsMapper.updateDeleteStatus(ids,"1");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -178,8 +183,28 @@ public class GoodsServiceImpl implements GoodsService{
                     map.put("category3Name",itemCatMapper.selectByPrimaryKey(category3Id).getName());
                 }
             }
-
             return new PageResult(pageInfo.getTotal(),goodsList);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /** 批量修改状态 */
+    @Override
+    public void updateAuditStatus(Long[] ids, String status) {
+
+        try {
+            goodsMapper.updateAuditStatus(ids,status);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /** 修改可销售状态 */
+    @Override
+    public void updateMarketable(Long[] ids, String status) {
+        try {
+            goodsMapper.updateMarketable(ids,status);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

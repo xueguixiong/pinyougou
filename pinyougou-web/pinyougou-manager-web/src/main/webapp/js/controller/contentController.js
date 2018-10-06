@@ -1,16 +1,14 @@
 /** 定义控制器层 */
-app.controller('goodsController', function($scope, $controller, baseService){
+app.controller('contentController', function($scope, $controller, baseService){
 
     /** 指定继承baseController */
     $controller('baseController',{$scope:$scope});
 
-    //定义商品状态数组
-    $scope.status = ['未审核','已审核','审核未通过','关闭'];
     /** 查询条件对象 */
     $scope.searchEntity = {};
     /** 分页查询(查询条件) */
     $scope.search = function(page, rows){
-        baseService.findByPage("/goods/findByPage", page,
+        baseService.findByPage("/content/findByPage", page,
 			rows, $scope.searchEntity)
             .then(function(response){
                 /** 获取分页查询结果 */
@@ -27,7 +25,7 @@ app.controller('goodsController', function($scope, $controller, baseService){
             url = "update";
         }
         /** 发送post请求 */
-        baseService.sendPost("/goods/" + url, $scope.entity)
+        baseService.sendPost("/content/" + url, $scope.entity)
             .then(function(response){
                 if (response.data){
                     /** 重新加载数据 */
@@ -47,7 +45,7 @@ app.controller('goodsController', function($scope, $controller, baseService){
     /** 批量删除 */
     $scope.delete = function(){
         if ($scope.ids.length > 0){
-            baseService.deleteById("/goods/delete", $scope.ids)
+            baseService.deleteById("/content/delete", $scope.ids)
                 .then(function(response){
                     if (response.data){
                         /** 重新加载数据 */
@@ -61,22 +59,24 @@ app.controller('goodsController', function($scope, $controller, baseService){
         }
     };
 
-    /** 审批商品，修改状态 */
-    $scope.updateStatus = function(status) {
-        if ($scope.ids.length > 0){
-            /** 调用服务层 */
-            baseService.sendGet("/goods/updateStatus?ids=" + $scope.ids + "&status" + status).then(function (response) {
-                if (response.data){ // 成功
-                    /** 重新加载数据 */
-                    $scope.reload();
-                    /** 清空ids数组 */
-                    $scope.ids = [];
-                }else {
-                    alert("操作失败！！")
-                }
-            });
-        }else {
-            alert("请选择要审核的商品！")
-        }
-    }
+    /**定义文件上传方法 */
+    $scope.uploadFile = function () {
+        baseService.uploadFile().then(function (response){
+            /** 如果上传成功，取出url */
+            if (response.data.status == 200){
+                /** 设置图片访问地址 */
+                $scope.entity.pic = response.data.url;
+            }else {
+                alert("上传失败！！")
+            }
+        });
+    };
+
+    $scope.findContentCategoryList = function () {
+        baseService.sendGet("/contentCategory/findAll").then(function (response) {
+             $scope.contentCategoryList = response.data;
+        });
+    };
+
+    $scope.status = ["无效","有效"];
 });
