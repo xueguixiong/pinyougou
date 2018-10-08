@@ -8,9 +8,8 @@
        http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <!-- 配置数据源 -->
-    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
-          destroy-method="close">
-        <property name="url" value="${jdbc.url}" />
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+        <property name="url" value="${jdbc.url}"/>
         <property name="username" value="${jdbc.username}"/>
         <property name="password" value="${jdbc.password}"/>
         <property name="driverClassName" value="${jdbc.driver}"/>
@@ -26,6 +25,7 @@
         <property name="typeAliasesPackage" value="com.pinyougou.pojo"/>
         <!-- 设置mybatis-config.xml -->
         <property name="configLocation" value="classpath:mybatis-config.xml"/>
+
         <!-- 设置SQL映射文件 -->
         <property name="mapperLocations" value="classpath:mappers/**/*.xml"/>
     </bean>
@@ -40,7 +40,7 @@
 
     <!-- 配置通用Mapper集成Spring4 -->
     <bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
-        <!-- 设置数据访问接口类 （通用Mapper的数据访问接口）-->
+        <!-- 设置数据访问接口类(通用Mapper的数据访问接口) -->
         <property name="basePackage" value="com.pinyougou.mapper"/>
     </bean>
 
@@ -50,6 +50,7 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
-    <!-- 配置开启事务注解驱动，由于dubbo用@service注解暴露服务，业务层需要加事务会产生代理对象，需设置proxy-target-class为true采用cglib产生代理 -->
+    <!-- 配置开启事务注解驱动，由于dubbo用@service注解暴露服务，业务层需要加事务会产生代理对象，
+        需设置proxy-target-class为true采用cglib产生代理 -->
     <tx:annotation-driven proxy-target-class="true"/>
 </beans>

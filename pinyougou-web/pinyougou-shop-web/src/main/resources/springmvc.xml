@@ -14,7 +14,7 @@
        http://www.springframework.org/schema/context/spring-context.xsd">
 
     <!-- 加载属性文件 -->
-    <context:property-placeholder location="classpath:application.properties"/>
+    <context:property-placeholder location="classpath:application*.properties"/>
 
     <!-- 开启MVC注解驱动 -->
     <mvc:annotation-driven>
